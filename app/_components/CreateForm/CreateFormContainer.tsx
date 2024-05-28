@@ -19,8 +19,10 @@ export const CreateFromContainer = () => {
       e.preventDefault();
       try {
         console.log(title, description);
-        const { errors } = await createTask({
+
+        await createTask({
           variables: {
+            // FIXME: Hardcoded UID, will fix later
             authorId: "b95dec62-27c9-4c75-85f0-1eac12226301",
             title,
             description,
