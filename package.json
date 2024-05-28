@@ -6,19 +6,43 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "dev:docker": "docker compose -p next-graphql -f docker/docker-compose.yml up -d",
+    "prisma:migrate": "prisma format && prisma migrate dev",
+    "prisma:generate": "prisma generate",
+    "compile": "graphql-codegen",
+    "watch": "graphql-codegen -w"
   },
   "dependencies": {
+    "@apollo/client": "^3.10.4",
+    "@apollo/server": "^4.10.4",
+    "@as-integrations/next": "^3.0.0",
+    "@prisma/client": "^5.14.0",
+    "graphql": "^16.8.1",
+    "graphql-subscriptions": "^2.0.0",
+    "next": "14.2.3",
+    "prisma": "^5.14.0",
     "react": "^18",
     "react-dom": "^18",
-    "next": "14.2.3"
+    "react-spinners": "^0.13.8"
   },
   "devDependencies": {
-    "typescript": "^5",
+    "@apollo/explorer": "^3.6.0",
+    "@graphql-codegen/cli": "^5.0.2",
+    "@graphql-codegen/client-preset": "^4.2.6",
+    "@graphql-codegen/typescript": "^4.0.7",
+    "@graphql-codegen/typescript-operations": "^4.2.1",
+    "@graphql-codegen/typescript-react-apollo": "^4.3.0",
+    "@graphql-codegen/typescript-resolvers": "^4.1.0",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "eslint": "^8",
-    "eslint-config-next": "14.2.3"
+    "eslint-config-next": "14.2.3",
+    "typescript": "^5"
+  },
+  "volta": {
+    "node": "20.13.1",
+    "npm": "10.8.0"
   }
 }
