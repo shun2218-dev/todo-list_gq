@@ -27,25 +27,22 @@ export type Category = {
   updatedAt?: Maybe<Scalars['DateTime']['output']>;
 };
 
+export type Msg = {
+  __typename?: 'Msg';
+  result: ResultMsg;
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
   createTask: Task;
-  createUser: User;
   deleteTask: Task;
   updateTaskStatus: Task;
 };
 
 
 export type MutationCreateTaskArgs = {
-  authorId: Scalars['String']['input'];
   description: Scalars['String']['input'];
   title: Scalars['String']['input'];
-};
-
-
-export type MutationCreateUserArgs = {
-  email: Scalars['String']['input'];
-  hashedPassword: Scalars['String']['input'];
 };
 
 
@@ -55,8 +52,8 @@ export type MutationDeleteTaskArgs = {
 
 
 export type MutationUpdateTaskStatusArgs = {
+  done: Scalars['Boolean']['input'];
   id: Scalars['ID']['input'];
-  isDone: Scalars['Boolean']['input'];
 };
 
 export type Query = {
@@ -84,6 +81,11 @@ export type QueryGetUserByIdArgs = {
   id: Scalars['ID']['input'];
 };
 
+export enum ResultMsg {
+  Ng = 'NG',
+  Ok = 'OK'
+}
+
 export type Task = {
   __typename?: 'Task';
   author: User;
@@ -91,8 +93,8 @@ export type Task = {
   categories?: Maybe<Array<Category>>;
   createdAt: Scalars['DateTime']['output'];
   description: Scalars['String']['output'];
+  done: Scalars['Boolean']['output'];
   id: Scalars['ID']['output'];
-  isDone: Scalars['Boolean']['output'];
   title: Scalars['String']['output'];
   updatedAt?: Maybe<Scalars['DateTime']['output']>;
 };
@@ -129,7 +131,7 @@ export type GetAllUsersQuery = { __typename?: 'Query', users: Array<{ __typename
 export type GetAllTasksQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetAllTasksQuery = { __typename?: 'Query', tasks: Array<{ __typename?: 'Task', id: string, title: string, description: string, isDone: boolean, createdAt: any, updatedAt?: any | null, authorId: string }> };
+export type GetAllTasksQuery = { __typename?: 'Query', tasks: Array<{ __typename?: 'Task', id: string, title: string, description: string, done: boolean, createdAt: any, updatedAt?: any | null, authorId: string }> };
 
 export type GetUserByIdQueryVariables = Exact<{
   id: Scalars['ID']['input'];
@@ -143,27 +145,18 @@ export type GetTasksByUserIdQueryVariables = Exact<{
 }>;
 
 
-export type GetTasksByUserIdQuery = { __typename?: 'Query', getTasksByUserId?: Array<{ __typename?: 'Task', id: string, title: string, description: string, isDone: boolean, createdAt: any, updatedAt?: any | null, authorId: string }> | null };
+export type GetTasksByUserIdQuery = { __typename?: 'Query', getTasksByUserId?: Array<{ __typename?: 'Task', id: string, title: string, description: string, done: boolean, createdAt: any, updatedAt?: any | null, authorId: string }> | null };
 
 export type GetTaskByIdQueryVariables = Exact<{
   id: Scalars['ID']['input'];
 }>;
 
 
-export type GetTaskByIdQuery = { __typename?: 'Query', getTaskById?: { __typename?: 'Task', id: string, title: string, description: string, isDone: boolean, createdAt: any, updatedAt?: any | null, authorId: string } | null };
-
-export type CreateUserMutationVariables = Exact<{
-  email: Scalars['String']['input'];
-  hashedPassword: Scalars['String']['input'];
-}>;
-
-
-export type CreateUserMutation = { __typename?: 'Mutation', createUser: { __typename?: 'User', id: string } };
+export type GetTaskByIdQuery = { __typename?: 'Query', getTaskById?: { __typename?: 'Task', id: string, title: string, description: string, done: boolean, createdAt: any, updatedAt?: any | null, authorId: string } | null };
 
 export type CreateTaskMutationVariables = Exact<{
   title: Scalars['String']['input'];
   description: Scalars['String']['input'];
-  authorId: Scalars['String']['input'];
 }>;
 
 
@@ -171,11 +164,11 @@ export type CreateTaskMutation = { __typename?: 'Mutation', createTask: { __type
 
 export type UpdateTaskStatusMutationVariables = Exact<{
   id: Scalars['ID']['input'];
-  newStatus: Scalars['Boolean']['input'];
+  done: Scalars['Boolean']['input'];
 }>;
 
 
-export type UpdateTaskStatusMutation = { __typename?: 'Mutation', updateTaskStatus: { __typename?: 'Task', id: string, isDone: boolean } };
+export type UpdateTaskStatusMutation = { __typename?: 'Mutation', updateTaskStatus: { __typename?: 'Task', id: string, done: boolean } };
 
 export type DeleteTaskMutationVariables = Exact<{
   id: Scalars['ID']['input'];
@@ -184,14 +177,14 @@ export type DeleteTaskMutationVariables = Exact<{
 
 export type DeleteTaskMutation = { __typename?: 'Mutation', deleteTask: { __typename?: 'Task', id: string } };
 
-export type GetTaskFragment = { __typename?: 'Task', id: string, title: string, description: string, isDone: boolean, createdAt: any, updatedAt?: any | null, authorId: string };
+export type GetTaskFragment = { __typename?: 'Task', id: string, title: string, description: string, done: boolean, createdAt: any, updatedAt?: any | null, authorId: string };
 
 export const GetTaskFragmentDoc = gql`
     fragment getTask on Task {
   id
   title
   description
-  isDone
+  done
   createdAt
   updatedAt
   authorId
@@ -324,7 +317,7 @@ export const GetTasksByUserIdDocument = gql`
     id
     title
     description
-    isDone
+    done
     createdAt
     updatedAt
     authorId
@@ -404,43 +397,9 @@ export type GetTaskByIdQueryHookResult = ReturnType<typeof useGetTaskByIdQuery>;
 export type GetTaskByIdLazyQueryHookResult = ReturnType<typeof useGetTaskByIdLazyQuery>;
 export type GetTaskByIdSuspenseQueryHookResult = ReturnType<typeof useGetTaskByIdSuspenseQuery>;
 export type GetTaskByIdQueryResult = Apollo.QueryResult<GetTaskByIdQuery, GetTaskByIdQueryVariables>;
-export const CreateUserDocument = gql`
-    mutation CreateUser($email: String!, $hashedPassword: String!) {
-  createUser(email: $email, hashedPassword: $hashedPassword) {
-    id
-  }
-}
-    `;
-export type CreateUserMutationFn = Apollo.MutationFunction<CreateUserMutation, CreateUserMutationVariables>;
-
-/**
- * __useCreateUserMutation__
- *
- * To run a mutation, you first call `useCreateUserMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useCreateUserMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [createUserMutation, { data, loading, error }] = useCreateUserMutation({
- *   variables: {
- *      email: // value for 'email'
- *      hashedPassword: // value for 'hashedPassword'
- *   },
- * });
- */
-export function useCreateUserMutation(baseOptions?: Apollo.MutationHookOptions<CreateUserMutation, CreateUserMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<CreateUserMutation, CreateUserMutationVariables>(CreateUserDocument, options);
-      }
-export type CreateUserMutationHookResult = ReturnType<typeof useCreateUserMutation>;
-export type CreateUserMutationResult = Apollo.MutationResult<CreateUserMutation>;
-export type CreateUserMutationOptions = Apollo.BaseMutationOptions<CreateUserMutation, CreateUserMutationVariables>;
 export const CreateTaskDocument = gql`
-    mutation CreateTask($title: String!, $description: String!, $authorId: String!) {
-  createTask(title: $title, description: $description, authorId: $authorId) {
+    mutation CreateTask($title: String!, $description: String!) {
+  createTask(title: $title, description: $description) {
     id
     title
     description
@@ -464,7 +423,6 @@ export type CreateTaskMutationFn = Apollo.MutationFunction<CreateTaskMutation, C
  *   variables: {
  *      title: // value for 'title'
  *      description: // value for 'description'
- *      authorId: // value for 'authorId'
  *   },
  * });
  */
@@ -476,10 +434,10 @@ export type CreateTaskMutationHookResult = ReturnType<typeof useCreateTaskMutati
 export type CreateTaskMutationResult = Apollo.MutationResult<CreateTaskMutation>;
 export type CreateTaskMutationOptions = Apollo.BaseMutationOptions<CreateTaskMutation, CreateTaskMutationVariables>;
 export const UpdateTaskStatusDocument = gql`
-    mutation UpdateTaskStatus($id: ID!, $newStatus: Boolean!) {
-  updateTaskStatus(id: $id, isDone: $newStatus) {
+    mutation UpdateTaskStatus($id: ID!, $done: Boolean!) {
+  updateTaskStatus(id: $id, done: $done) {
     id
-    isDone
+    done
   }
 }
     `;
@@ -499,7 +457,7 @@ export type UpdateTaskStatusMutationFn = Apollo.MutationFunction<UpdateTaskStatu
  * const [updateTaskStatusMutation, { data, loading, error }] = useUpdateTaskStatusMutation({
  *   variables: {
  *      id: // value for 'id'
- *      newStatus: // value for 'newStatus'
+ *      done: // value for 'done'
  *   },
  * });
  */

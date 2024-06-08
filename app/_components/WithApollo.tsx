@@ -1,9 +1,8 @@
-import type { FC, ReactNode } from "react";
+import type { FC } from "react";
 import { ApolloClient, ApolloProvider, InMemoryCache } from "@apollo/client";
+import { HasChildren } from "@types";
 
-type Props = {
-  children: ReactNode;
-};
+type Props = HasChildren;
 
 export const client = new ApolloClient({
   ssrMode: true,

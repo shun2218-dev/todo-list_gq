@@ -1,10 +1,11 @@
-import type { FC, FormEvent, ReactNode } from "react";
+import type { FC, FormEvent } from "react";
+import { HasChildren } from "@types";
+import { FormContainer } from "@components/Form/FormContainer";
 
-type Props = {
+type Props = HasChildren & {
   mutate: (e: FormEvent<HTMLFormElement>) => void;
-  children: ReactNode;
 };
 
 export const CreateFromPresenter: FC<Props> = ({ mutate, children }) => {
-  return <form onSubmit={mutate}>{children}</form>;
+  return <FormContainer handleSubmit={mutate}>{children}</FormContainer>;
 };

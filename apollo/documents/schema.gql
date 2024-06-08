@@ -16,9 +16,10 @@ type Query {
 }
 
 type Mutation {
-  createUser(email: String!, hashedPassword: String!): User!
-  createTask(title: String!, description: String!, authorId: String!): Task!
-  updateTaskStatus(id: ID!, isDone: Boolean!): Task!
+  # createUser(email: String!, password: String!): Msg!
+  # signIn(email: String!, password: String!): Msg!
+  createTask(title: String!, description: String!): Task!
+  updateTaskStatus(id: ID!, done: Boolean!): Task!
   deleteTask(id: ID!): Task!
 }
 
@@ -26,7 +27,7 @@ type Task {
   id: ID!
   title: String!
   description: String!
-  isDone: Boolean!
+  done: Boolean!
   categories: [Category!]
   createdAt: DateTime!
   updatedAt: DateTime
@@ -63,6 +64,15 @@ type UserInput {
   hashedPassword: String!
 }
 
+type Msg {
+  result: ResultMsg!
+}
+
+enum ResultMsg {
+  OK
+  NG
+}
+
 query GetAllUsers {
   users {
     id
@@ -89,7 +99,7 @@ query GetTasksByUserId($authorId: String!) {
     id
     title
     description
-    isDone
+    done
     createdAt
     updatedAt
     authorId
@@ -102,28 +112,30 @@ query GetTaskById($id: ID!) {
   }
 }
 
-mutation CreateUser($email: String!, $hashedPassword: String!) {
-  createUser(email: $email, hashedPassword: $hashedPassword) {
-    id
-  }
-}
+# mutation CreateUser($email: String!, $password: String!) {
+#   createUser(email: $email, password: $password) {
+#     result
+#   }
+# }
 
-mutation CreateTask(
-  $title: String!
-  $description: String!
-  $authorId: String!
-) {
-  createTask(title: $title, description: $description, authorId: $authorId) {
+# mutation SignIn($email: String!, $password: String!) {
+#   signIn(email: $email, password: $password) {
+#     result
+#   }
+# }
+
+mutation CreateTask($title: String!, $description: String!) {
+  createTask(title: $title, description: $description) {
     id
     title
     description
   }
 }
 
-mutation UpdateTaskStatus($id: ID!, $newStatus: Boolean!) {
-  updateTaskStatus(id: $id, isDone: $newStatus) {
+mutation UpdateTaskStatus($id: ID!, $done: Boolean!) {
+  updateTaskStatus(id: $id, done: $done) {
     id
-    isDone
+    done
   }
 }
 
@@ -137,7 +149,7 @@ fragment getTask on Task {
   id
   title
   description
-  isDone
+  done
   createdAt
   updatedAt
   authorId

@@ -1,6 +1,7 @@
 "use client";
 import { memo } from "react";
-import { GetAllTasksQuery } from "@/apollo/__generated__/client/operations-types";
+import { GetAllTasksQuery } from "@schema/__generated__/client/operations-types";
+import styles from "./TaskList.module.scss";
 
 import type { FC } from "react";
 import { TaskItemContainer } from "../TaskItem/TaskItemContainer";
@@ -13,7 +14,7 @@ const TaskListPresenterMemo: FC<Props> = ({ data }) => {
   return (
     <div>
       useGetAllTasksQuery
-      <ul>
+      <ul className={styles["taskList"]}>
         {data?.tasks.map((task) => (
           <TaskItemContainer key={task.id} task={task} />
         ))}

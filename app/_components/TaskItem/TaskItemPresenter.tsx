@@ -1,6 +1,6 @@
 "use client";
-import type { FC } from "react";
 import { memo } from "react";
+import type { FC } from "react";
 import { TaskItemProps } from "./TaskItemContainer";
 
 type Props = TaskItemProps & {
@@ -11,8 +11,14 @@ type Props = TaskItemProps & {
 const TaskItemPresenterMemo: FC<Props> = ({ task, onUpdate, onDelete }) => {
   return (
     <li key={task.id} style={{ listStyle: "none", display: "flex" }}>
-      <input type="checkbox" checked={task.isDone} onChange={onUpdate} />
       <div>
+        <label htmlFor="done">done: </label>
+        <input
+          type="checkbox"
+          id="done"
+          checked={task.done}
+          onChange={onUpdate}
+        />
         <p>id: {task.id}</p>
         <p>title: {task.title}</p>
         <p>description: {task.description}</p>

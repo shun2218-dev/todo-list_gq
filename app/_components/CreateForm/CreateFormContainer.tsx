@@ -1,9 +1,9 @@
 "use client";
 import type { FormEvent, ChangeEvent } from "react";
 import { useState, useCallback } from "react";
-import { useCreateTaskMutation } from "@/apollo/__generated__/client/operations-types";
+import { useCreateTaskMutation } from "@schema/__generated__/client/operations-types";
 import { CreateFromPresenter } from "./CreateFormPresenter";
-import { refetchAllTasks } from "@/app/_utils/refetchAllTasks";
+import { refetchAllTasks } from "@utils/refetchAllTasks";
 
 export const CreateFromContainer = () => {
   const [title, setTitle] = useState("");
@@ -23,7 +23,6 @@ export const CreateFromContainer = () => {
         await createTask({
           variables: {
             // FIXME: Hardcoded UID, will fix later
-            authorId: "b95dec62-27c9-4c75-85f0-1eac12226301",
             title,
             description,
           },
@@ -63,7 +62,7 @@ export const CreateFromContainer = () => {
         value={description}
         onChange={handleChangeDescription}
       />
-      <button disabled={!title || !description || loading} type="submit">
+      <button disabled={!title || loading} type="submit">
         Create Task
       </button>
     </CreateFromPresenter>

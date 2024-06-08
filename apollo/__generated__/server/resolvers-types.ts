@@ -26,25 +26,22 @@ export type Category = {
   updatedAt?: Maybe<Scalars['DateTime']['output']>;
 };
 
+export type Msg = {
+  __typename?: 'Msg';
+  result: ResultMsg;
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
   createTask: Task;
-  createUser: User;
   deleteTask: Task;
   updateTaskStatus: Task;
 };
 
 
 export type MutationCreateTaskArgs = {
-  authorId: Scalars['String']['input'];
   description: Scalars['String']['input'];
   title: Scalars['String']['input'];
-};
-
-
-export type MutationCreateUserArgs = {
-  email: Scalars['String']['input'];
-  hashedPassword: Scalars['String']['input'];
 };
 
 
@@ -54,8 +51,8 @@ export type MutationDeleteTaskArgs = {
 
 
 export type MutationUpdateTaskStatusArgs = {
+  done: Scalars['Boolean']['input'];
   id: Scalars['ID']['input'];
-  isDone: Scalars['Boolean']['input'];
 };
 
 export type Query = {
@@ -83,6 +80,11 @@ export type QueryGetUserByIdArgs = {
   id: Scalars['ID']['input'];
 };
 
+export enum ResultMsg {
+  Ng = 'NG',
+  Ok = 'OK'
+}
+
 export type Task = {
   __typename?: 'Task';
   author: User;
@@ -90,8 +92,8 @@ export type Task = {
   categories?: Maybe<Array<Category>>;
   createdAt: Scalars['DateTime']['output'];
   description: Scalars['String']['output'];
+  done: Scalars['Boolean']['output'];
   id: Scalars['ID']['output'];
-  isDone: Scalars['Boolean']['output'];
   title: Scalars['String']['output'];
   updatedAt?: Maybe<Scalars['DateTime']['output']>;
 };
@@ -195,8 +197,10 @@ export type ResolversTypes = {
   Category: ResolverTypeWrapper<Category>;
   DateTime: ResolverTypeWrapper<Scalars['DateTime']['output']>;
   ID: ResolverTypeWrapper<Scalars['ID']['output']>;
+  Msg: ResolverTypeWrapper<Msg>;
   Mutation: ResolverTypeWrapper<{}>;
   Query: ResolverTypeWrapper<{}>;
+  ResultMsg: ResultMsg;
   String: ResolverTypeWrapper<Scalars['String']['output']>;
   Task: ResolverTypeWrapper<Task>;
   User: ResolverTypeWrapper<User>;
@@ -210,6 +214,7 @@ export type ResolversParentTypes = {
   Category: Category;
   DateTime: Scalars['DateTime']['output'];
   ID: Scalars['ID']['output'];
+  Msg: Msg;
   Mutation: {};
   Query: {};
   String: Scalars['String']['output'];
@@ -232,11 +237,15 @@ export interface DateTimeScalarConfig extends GraphQLScalarTypeConfig<ResolversT
   name: 'DateTime';
 }
 
+export type MsgResolvers<ContextType = any, ParentType extends ResolversParentTypes['Msg'] = ResolversParentTypes['Msg']> = {
+  result?: Resolver<ResolversTypes['ResultMsg'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
-  createTask?: Resolver<ResolversTypes['Task'], ParentType, ContextType, RequireFields<MutationCreateTaskArgs, 'authorId' | 'description' | 'title'>>;
-  createUser?: Resolver<ResolversTypes['User'], ParentType, ContextType, RequireFields<MutationCreateUserArgs, 'email' | 'hashedPassword'>>;
+  createTask?: Resolver<ResolversTypes['Task'], ParentType, ContextType, RequireFields<MutationCreateTaskArgs, 'description' | 'title'>>;
   deleteTask?: Resolver<ResolversTypes['Task'], ParentType, ContextType, RequireFields<MutationDeleteTaskArgs, 'id'>>;
-  updateTaskStatus?: Resolver<ResolversTypes['Task'], ParentType, ContextType, RequireFields<MutationUpdateTaskStatusArgs, 'id' | 'isDone'>>;
+  updateTaskStatus?: Resolver<ResolversTypes['Task'], ParentType, ContextType, RequireFields<MutationUpdateTaskStatusArgs, 'done' | 'id'>>;
 };
 
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
@@ -254,8 +263,8 @@ export type TaskResolvers<ContextType = any, ParentType extends ResolversParentT
   categories?: Resolver<Maybe<Array<ResolversTypes['Category']>>, ParentType, ContextType>;
   createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
   description?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  done?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-  isDone?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   title?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   updatedAt?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
@@ -288,6 +297,7 @@ export type UserInputResolvers<ContextType = any, ParentType extends ResolversPa
 export type Resolvers<ContextType = any> = {
   Category?: CategoryResolvers<ContextType>;
   DateTime?: GraphQLScalarType;
+  Msg?: MsgResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
   Task?: TaskResolvers<ContextType>;

@@ -1,6 +1,6 @@
 "use client";
 
-import { useGetAllTasksQuery } from "@/apollo/__generated__/client/operations-types";
+import { useGetAllTasksQuery } from "@schema/__generated__/client/operations-types";
 import { TaskListPresenter } from "./TaskListPresenter";
 import Loading from "@/app/loading";
 
