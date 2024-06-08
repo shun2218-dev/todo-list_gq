@@ -78,15 +78,18 @@ const resolvers = {
     //     return { result: "NG" };
     //   }
     // },
-    createTask: (
+    createTask: async (
       _: ResolversParentTypes["Mutation"],
       args: MutationCreateTaskArgs,
       ctx: Context
     ) => {
-      console.log("context", ctx.user);
       if (!ctx.user) throw new Error("This action requires logged in");
+      const currentUser = await ctx.prisma.user.findFirst({
+        where: { email: ctx.user.email },
+      });
+      if (!currentUser) throw new Error("User not found");
       return ctx.prisma.task.create({
-        data: { ...args, authorId: "7d6a2037-efc8-4b38-8bc3-7d689de9919e" },
+        data: { ...args, authorId: currentUser.id },
       });
     },
     updateTaskStatus: (
