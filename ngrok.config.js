@@ -20,4 +20,4 @@ async function setup() {
   listener.forward(`${host}:${port}`);
 }
 
-if (makeListener) setup();
+if (makeListener && process.env.NGROK_AUTHTOKEN) setup();
