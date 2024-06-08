@@ -1,0 +1,156 @@
+scalar DateTime
+  @specifiedBy(url: "https://scalars.graphql.org/andimarek/date-time")
+
+schema {
+  query: Query
+  mutation: Mutation
+}
+
+type Query {
+  users: [User!]!
+  tasks: [Task!]!
+  categories: [Category]
+  getUserById(id: ID!): User!
+  getTasksByUserId(authorId: String!): [Task!]
+  getTaskById(id: ID!): Task
+}
+
+type Mutation {
+  # createUser(email: String!, password: String!): Msg!
+  # signIn(email: String!, password: String!): Msg!
+  createTask(title: String!, description: String!): Task!
+  updateTaskStatus(id: ID!, done: Boolean!): Task!
+  deleteTask(id: ID!): Task!
+}
+
+type Task {
+  id: ID!
+  title: String!
+  description: String!
+  done: Boolean!
+  categories: [Category!]
+  createdAt: DateTime!
+  updatedAt: DateTime
+  author: User!
+  authorId: String!
+}
+
+type Category {
+  id: ID!
+  name: String!
+  tasks: [Task!]
+  createdAt: DateTime!
+  updatedAt: DateTime
+}
+
+type User {
+  id: ID!
+  email: String!
+  hashedPassword: String!
+  createdAt: DateTime!
+  updatedAt: DateTime
+  tasks: [Task!]
+}
+
+type UserInfo {
+  id: ID!
+  email: String!
+  createdAt: DateTime!
+  updatedAt: DateTime
+}
+
+type UserInput {
+  email: String!
+  hashedPassword: String!
+}
+
+type Msg {
+  result: ResultMsg!
+}
+
+enum ResultMsg {
+  OK
+  NG
+}
+
+query GetAllUsers {
+  users {
+    id
+    email
+  }
+}
+
+query GetAllTasks {
+  tasks {
+    ...getTask
+  }
+}
+
+query GetUserById($id: ID!) {
+  getUserById(id: $id) {
+    id
+    email
+    createdAt
+  }
+}
+
+query GetTasksByUserId($authorId: String!) {
+  getTasksByUserId(authorId: $authorId) {
+    id
+    title
+    description
+    done
+    createdAt
+    updatedAt
+    authorId
+  }
+}
+
+query GetTaskById($id: ID!) {
+  getTaskById(id: $id) {
+    ...getTask
+  }
+}
+
+# mutation CreateUser($email: String!, $password: String!) {
+#   createUser(email: $email, password: $password) {
+#     result
+#   }
+# }
+
+# mutation SignIn($email: String!, $password: String!) {
+#   signIn(email: $email, password: $password) {
+#     result
+#   }
+# }
+
+mutation CreateTask($title: String!, $description: String!) {
+  createTask(title: $title, description: $description) {
+    id
+    title
+    description
+  }
+}
+
+mutation UpdateTaskStatus($id: ID!, $done: Boolean!) {
+  updateTaskStatus(id: $id, done: $done) {
+    id
+    done
+  }
+}
+
+mutation DeleteTask($id: ID!) {
+  deleteTask(id: $id) {
+    id
+  }
+}
+
+fragment getTask on Task {
+  id
+  title
+  description
+  done
+  createdAt
+  updatedAt
+  authorId
+}

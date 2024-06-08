@@ -1,0 +1,15 @@
+.taskList {
+  max-width: 80%;
+  margin: 0 auto;
+  max-height: 60svh;
+  overflow-y: auto;
+}
+
+@media screen and (min-width: 768px) {
+  .taskList {
+    max-width: 50%;
+    margin: 0 auto;
+    max-height: 80svh;
+    overflow-y: auto;
+  }
+}
