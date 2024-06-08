@@ -6,7 +6,7 @@ type Props = HasChildren;
 
 export const client = new ApolloClient({
   ssrMode: true,
-  uri: "http://localhost:3000/api/graphql",
+  uri: process.env.NEXT_PUBLIC_GRAPHQL_ENDPOINT,
   cache: new InMemoryCache(),
   version: "1.0",
 });
