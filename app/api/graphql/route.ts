@@ -10,10 +10,7 @@ import type {
   MutationCreateTaskArgs,
   MutationUpdateTaskStatusArgs,
   MutationDeleteTaskArgs,
-  // MutationCreateUserArgs,
-  // MutationSignInArgs,
 } from "@schema/__generated__/server/resolvers-types";
-import { hash, compare } from "bcrypt";
 import { createContext } from "@schema/context";
 import type { Context } from "@schema/context";
 import { withApiAuthRequired } from "@auth0/nextjs-auth0";
@@ -45,40 +42,6 @@ const resolvers = {
     ) => ctx.prisma.task.findFirst({ where: { ...args } }),
   },
   Mutation: {
-    // createUser: async (
-    //   _: ResolversParentTypes["Mutation"],
-    //   args: MutationCreateUserArgs,
-    //   ctx: Context
-    // ) => {
-    //   try {
-    //     const hashedPassword = await hash(args.password, 12);
-    //     const user = await ctx.prisma.user.create({
-    //       data: { email: args.email, hashedPassword },
-    //     });
-    //     if (!user) throw new Error("Failed to create user");
-    //     return { result: "OK" };
-    //   } catch (e) {
-    //     return { result: "NG" };
-    //   }
-    // },
-    // signIn: async (
-    //   _: ResolversParentTypes["Mutation"],
-    //   args: MutationSignInArgs,
-    //   ctx: Context
-    // ) => {
-    //   try {
-    //     const user = await ctx.prisma.user.findFirst({
-    //       where: { email: args.email },
-    //     });
-    //     if (!user) throw new Error("User not found");
-
-    //     const result = await compare(args.password, user.hashedPassword);
-    //     if (!result) throw new Error("Maybe incorrect password");
-    //     return { result: "OK" };
-    //   } catch (e) {
-    //     return { result: "NG" };
-    //   }
-    // },
     createTask: async (
       _: ResolversParentTypes["Mutation"],
       args: MutationCreateTaskArgs,
