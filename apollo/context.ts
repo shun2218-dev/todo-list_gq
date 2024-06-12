@@ -1,4 +1,3 @@
-import type { NextApiRequest, NextApiResponse } from "next";
 import { PrismaClient } from "@prisma/client";
 import { prisma } from "@libs/prisma";
 import { Claims, getSession } from "@auth0/nextjs-auth0";
@@ -9,10 +8,7 @@ export type Context = {
   prisma: PrismaClient;
 };
 
-export async function createContext(
-  req: NextApiRequest,
-  res: NextApiResponse
-): Promise<Context> {
+export async function createContext(): Promise<Context> {
   const session = await getSession();
 
   // if the user is not logged in, omit returning the user and accessToken
