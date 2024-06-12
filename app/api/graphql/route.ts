@@ -16,6 +16,7 @@ import type {
 import { hash, compare } from "bcrypt";
 import { createContext } from "@schema/context";
 import type { Context } from "@schema/context";
+import { withApiAuthRequired } from "@auth0/nextjs-auth0";
 
 const schemaPath = join(process.cwd(), "/apollo/documents/schema.gql");
 const typeDefs = readFileSync(schemaPath, { encoding: "utf-8" });
@@ -109,8 +110,10 @@ const server = new ApolloServer<Context>({
   typeDefs,
 });
 
-const handler = startServerAndCreateNextHandler(server, {
-  context: createContext,
-});
+const handler = withApiAuthRequired(
+  startServerAndCreateNextHandler(server, {
+    context: createContext,
+  })
+);
 
 export { handler as GET, handler as POST };
