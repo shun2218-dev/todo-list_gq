@@ -1,3 +1,4 @@
+import type { NextRequest } from "next/server";
 import { ApolloServer } from "@apollo/server";
 import { startServerAndCreateNextHandler } from "@as-integrations/next";
 import { readFileSync } from "node:fs";
@@ -13,7 +14,6 @@ import type {
 } from "@schema/__generated__/server/resolvers-types";
 import { createContext } from "@schema/context";
 import type { Context } from "@schema/context";
-import { withApiAuthRequired } from "@auth0/nextjs-auth0";
 
 const schemaPath = join(process.cwd(), "/apollo/documents/schema.gql");
 const typeDefs = readFileSync(schemaPath, { encoding: "utf-8" });
@@ -73,10 +73,8 @@ const server = new ApolloServer<Context>({
   typeDefs,
 });
 
-const handler = withApiAuthRequired(
-  startServerAndCreateNextHandler(server, {
-    context: createContext,
-  })
-);
+const handler = startServerAndCreateNextHandler<NextRequest, Context>(server, {
+  context: createContext,
+});
 
 export { handler as GET, handler as POST };
