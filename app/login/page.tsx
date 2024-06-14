@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation";
 
 const LoginPage = () => {
   const router = useRouter();
-  router.replace("/api/auth/login");
+  router.replace("/", {});
   // const [signIn, { data, loading, error }] = useSignInMutation();
   // const handleSignIn = async (e: FormEvent<HTMLFormElement>) => {
   //   e.preventDefault();
